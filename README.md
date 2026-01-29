@@ -1,6 +1,6 @@
-# learn_language
+# learn-language-flutter-app
 
-A new Flutter project.
+This is repo for the learn language flutter app.
 
 ## Getting Started
 
