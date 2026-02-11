@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:record/record.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:whisper_kit/whisper_kit.dart';
-import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'src/features/transcription/presentation/screens/audio_capture_screen.dart';
+import 'src/features/transcription/di/audio_capture_di.dart';
 
 void main() {
+  // Initialize audio capture dependency injection
+  AudioCaptureDI.init();
   runApp(const MyApp());
 }
 
@@ -40,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const DeviceSTTScreen(),
     const WhisperScreen(),
+    const AudioCaptureScreen(),
   ];
 
   @override
@@ -61,6 +66,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.hearing),
             label: 'Whisper STT',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.audiotrack),
+            label: 'Audio Capture',
           ),
         ],
       ),
