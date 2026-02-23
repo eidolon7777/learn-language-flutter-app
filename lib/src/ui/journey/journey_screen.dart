@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learn_language/src/ui/core/widgets/staggered_item.dart';
+import 'package:learn_language/src/ui/settings/settings_screen.dart';
 import 'view_model/journey_view_model.dart';
 import 'widgets/journey_header.dart';
 import 'widgets/timeline_item.dart';
@@ -71,7 +72,9 @@ class JourneyScreen extends ConsumerWidget {
                       padding: const EdgeInsets.all(32.0),
                       child: Center(
                         child: TextButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen()));
+                          },
                           icon: const Icon(Icons.arrow_forward_rounded, size: 16),
                           label: const Text('View detailed curriculum'),
                           iconAlignment: IconAlignment.end,
