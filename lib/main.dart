@@ -14,9 +14,21 @@ import 'package:permission_handler/permission_handler.dart';
 // import 'src/features/transcription/presentation/screens/audio_capture_screen.dart';
 // import 'src/features/transcription/di/audio_capture_di.dart';
 
-void main() {
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa_onnx;
+import 'src/features/sherpa_onnx/domain/sherpa_model.dart';
+import 'src/features/sherpa_onnx/ui/screens/models_screen.dart';
+
+void main() async {
   // Initialize audio capture dependency injection
   // AudioCaptureDI.init();
+  
+  sherpa_onnx.initBindings();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(ModelTypeAdapter());
+  Hive.registerAdapter(SherpaModelAdapter());
+  
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -36,7 +48,7 @@ class MyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      home: const JourneyScreen(),
+      home: const HomeScreen(),
     );
   }
 }
@@ -53,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const DeviceSTTScreen(),
     const WhisperScreen(),
+    const ModelsScreen(),
   //  const AudioCaptureScreen(),
   ];
 
@@ -62,6 +75,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
@@ -77,9 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Whisper STT',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.audiotrack),
-            label: 'Audio Capture',
+            icon: Icon(Icons.download),
+            label: 'Models',
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.audiotrack),
+          //   label: 'Audio Capture',
+          // ),
         ],
       ),
     );
