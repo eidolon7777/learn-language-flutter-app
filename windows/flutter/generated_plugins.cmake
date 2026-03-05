@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
+  flutter_onnxruntime
   flutter_tts
   permission_handler_windows
   record_windows
@@ -11,7 +12,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
-  sherpa_onnx_windows
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

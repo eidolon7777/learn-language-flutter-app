@@ -29,7 +29,7 @@ class _VadScreenState extends ConsumerState<VadScreen> {
 
   Future<void> _initModel() async {
     try {
-      await ref.read(sherpaRunnerProvider).initVad(widget.model.id);
+    //  await ref.read(sherpaRunnerProvider).initVad(widget.model.id);
       if (mounted) setState(() => _status = 'Ready');
     } catch (e) {
       if (mounted) setState(() => _status = 'Error: $e');
@@ -70,12 +70,12 @@ class _VadScreenState extends ConsumerState<VadScreen> {
         });
         _addHistory('Started recording');
 
-        ref.read(sherpaRunnerProvider).startVadStream(stream, (isSpeech) {
-          if (mounted && _isSpeech != isSpeech) {
-             setState(() => _isSpeech = isSpeech);
-             _addHistory(isSpeech ? 'Speech Detected' : 'Silence');
-          }
-        });
+        // ref.read(sherpaRunnerProvider).startVadStream(stream, (isSpeech) {
+        //   if (mounted && _isSpeech != isSpeech) {
+        //      setState(() => _isSpeech = isSpeech);
+        //      _addHistory(isSpeech ? 'Speech Detected' : 'Silence');
+        //   }
+        // });
       }
     } catch (e) {
       setState(() => _status = 'Error: $e');
@@ -85,7 +85,7 @@ class _VadScreenState extends ConsumerState<VadScreen> {
   
   Future<void> _stopRecording() async {
     await _audioRecorder.stop();
-    ref.read(sherpaRunnerProvider).stopVadStream();
+  // ref.read(sherpaRunnerProvider).stopVadStream();
     setState(() {
       _isRecording = false;
       _isSpeech = false;
@@ -98,7 +98,7 @@ class _VadScreenState extends ConsumerState<VadScreen> {
   void dispose() {
     _audioRecorder.dispose();
     _scrollController.dispose();
-    ref.read(sherpaRunnerProvider).disposeVad();
+  //  ref.read(sherpaRunnerProvider).disposeVad();
     super.dispose();
   }
 

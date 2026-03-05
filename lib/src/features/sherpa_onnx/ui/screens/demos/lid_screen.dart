@@ -28,7 +28,7 @@ class _LidScreenState extends ConsumerState<LidScreen> {
 
   Future<void> _initModel() async {
     try {
-      await ref.read(sherpaRunnerProvider).initLid(widget.model.id);
+   //   await ref.read(sherpaRunnerProvider).initLid(widget.model.id);
       if (mounted) setState(() => _status = 'Ready (Record to detect language)');
     } catch (e) {
       if (mounted) setState(() => _status = 'Error: $e');
@@ -80,13 +80,13 @@ class _LidScreenState extends ConsumerState<LidScreen> {
     final floatSamples = _int16ToFloat32(data);
     
     try {
-      final result = await ref.read(sherpaRunnerProvider).computeLid(floatSamples);
-      if (mounted && result != null) {
-        setState(() {
-           _detectedLanguage = result;
-           _status = 'Detected: $result';
-        });
-      }
+      // final result = await ref.read(sherpaRunnerProvider).computeLid(floatSamples);
+      // if (mounted && result != null) {
+      //   setState(() {
+      //      _detectedLanguage = result;
+      //      _status = 'Detected: $result';
+      //   });
+      // }
     } catch (e) {
       debugPrint('LID Error: $e');
     }
@@ -116,7 +116,7 @@ class _LidScreenState extends ConsumerState<LidScreen> {
   @override
   void dispose() {
     _audioRecorder.dispose();
-    ref.read(sherpaRunnerProvider).disposeLid();
+   // ref.read(sherpaRunnerProvider).disposeLid();
     super.dispose();
   }
 

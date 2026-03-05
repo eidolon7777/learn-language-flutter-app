@@ -7,7 +7,7 @@ import 'package:learn_language/src/features/sherpa_onnx/data/sherpa_provider.dar
 import '../../../domain/sherpa_model.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa;
+//import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa;
 
 class TtsScreen extends ConsumerStatefulWidget {
   final SherpaModel model;
@@ -58,7 +58,7 @@ class _TtsScreenState extends ConsumerState<TtsScreen> {
   Future<void> _initModel() async {
     _addLog('Initializing TTS model: ${widget.model.name}...');
     try {
-      await ref.read(sherpaRunnerProvider).initTts(widget.model.id);
+    //  await ref.read(sherpaRunnerProvider).initTts(widget.model.id);
       if (mounted) {
         setState(() => _status = 'Ready');
         _addLog('Model initialized successfully.');
@@ -81,39 +81,39 @@ class _TtsScreenState extends ConsumerState<TtsScreen> {
     _addLog('Generating audio for: "${_textController.text}" (Speaker: $_speakerId, Speed: $_speed)');
 
     try {
-      final result = await ref.read(sherpaRunnerProvider).generateTts(
-        _textController.text,
-        speakerId: _speakerId,
-        speed: _speed,
-      );
+    //  final result = await ref.read(sherpaRunnerProvider).generateTts(
+    //    _textController.text,
+    //    speakerId: _speakerId,
+    //    speed: _speed,
+    //  );
 
-      if (result != null) {
-         _addLog('Audio generated. Samples: ${result.samples.length}, Rate: ${result.sampleRate}');
-         setState(() => _status = 'Playing...');
+      // if (result != null) {
+      //    _addLog('Audio generated. Samples: ${result.samples.length}, Rate: ${result.sampleRate}');
+      //    setState(() => _status = 'Playing...');
          
-         final tempDir = await getTemporaryDirectory();
-         final file = File('${tempDir.path}/tts_output.wav');
-         if (await file.exists()) {
-           await file.delete();
-         }
+      //    final tempDir = await getTemporaryDirectory();
+      //    final file = File('${tempDir.path}/tts_output.wav');
+      //    if (await file.exists()) {
+      //      await file.delete();
+      //    }
          
-         // Manual WAV saving since .save() might be missing
-         await _saveWav(file, result);
-         _addLog('Saved WAV to ${file.path}');
+      //    // Manual WAV saving since .save() might be missing
+      //    await _saveWav(file, result);
+      //    _addLog('Saved WAV to ${file.path}');
          
-         await _player.stop(); // Stop previous playback if any
-         await _player.play(DeviceFileSource(file.path));
+      //    await _player.stop(); // Stop previous playback if any
+      //    await _player.play(DeviceFileSource(file.path));
          
-         _player.onPlayerComplete.listen((_) {
-            if (mounted) {
-               setState(() => _status = 'Finished');
-               _addLog('Playback finished');
-            }
-         });
-      } else {
-        _addLog('Error: Generated audio is null. Check if model is loaded correctly.');
-        setState(() => _status = 'Error: Generation returned null');
-      }
+      //    _player.onPlayerComplete.listen((_) {
+      //       if (mounted) {
+      //          setState(() => _status = 'Finished');
+      //          _addLog('Playback finished');
+      //       }
+      //    });
+      // } else {
+      //   _addLog('Error: Generated audio is null. Check if model is loaded correctly.');
+      //   setState(() => _status = 'Error: Generation returned null');
+      // }
     } catch (e) {
       _addLog('Error generating audio: $e');
       setState(() => _status = 'Error: $e');
@@ -124,50 +124,50 @@ class _TtsScreenState extends ConsumerState<TtsScreen> {
     }
   }
   
-  Future<void> _saveWav(File file, sherpa.GeneratedAudio audio) async {
-    final sampleRate = audio.sampleRate;
-    final samples = audio.samples; // Float32List
+  // Future<void> _saveWav(File file, sherpa.GeneratedAudio audio) async {
+  //   final sampleRate = audio.sampleRate;
+  //   final samples = audio.samples; // Float32List
     
-    // Convert Float32 to Int16
-    final int16Samples = Int16List(samples.length);
-    for (int i = 0; i < samples.length; i++) {
-      var s = samples[i];
-      if (s > 1.0) s = 1.0;
-      if (s < -1.0) s = -1.0;
-      int16Samples[i] = (s * 32767).round();
-    }
+  //   // Convert Float32 to Int16
+  //   final int16Samples = Int16List(samples.length);
+  //   for (int i = 0; i < samples.length; i++) {
+  //     var s = samples[i];
+  //     if (s > 1.0) s = 1.0;
+  //     if (s < -1.0) s = -1.0;
+  //     int16Samples[i] = (s * 32767).round();
+  //   }
     
-    final int channels = 1;
-    final int byteRate = sampleRate * channels * 2;
-    final int blockAlign = channels * 2;
-    final int bitsPerSample = 16;
-    final int dataSize = int16Samples.length * 2;
-    final int chunkSize = 36 + dataSize;
+  //   final int channels = 1;
+  //   final int byteRate = sampleRate * channels * 2;
+  //   final int blockAlign = channels * 2;
+  //   final int bitsPerSample = 16;
+  //   final int dataSize = int16Samples.length * 2;
+  //   final int chunkSize = 36 + dataSize;
 
-    final bytes = BytesBuilder();
+  //   final bytes = BytesBuilder();
     
-    // RIFF header
-    bytes.add('RIFF'.codeUnits);
-    _addInt32(bytes, chunkSize);
-    bytes.add('WAVE'.codeUnits);
+  //   // RIFF header
+  //   bytes.add('RIFF'.codeUnits);
+  //   _addInt32(bytes, chunkSize);
+  //   bytes.add('WAVE'.codeUnits);
     
-    // fmt chunk
-    bytes.add('fmt '.codeUnits);
-    _addInt32(bytes, 16); // Subchunk1Size
-    _addInt16(bytes, 1); // AudioFormat (PCM)
-    _addInt16(bytes, channels);
-    _addInt32(bytes, sampleRate);
-    _addInt32(bytes, byteRate);
-    _addInt16(bytes, blockAlign);
-    _addInt16(bytes, bitsPerSample);
+  //   // fmt chunk
+  //   bytes.add('fmt '.codeUnits);
+  //   _addInt32(bytes, 16); // Subchunk1Size
+  //   _addInt16(bytes, 1); // AudioFormat (PCM)
+  //   _addInt16(bytes, channels);
+  //   _addInt32(bytes, sampleRate);
+  //   _addInt32(bytes, byteRate);
+  //   _addInt16(bytes, blockAlign);
+  //   _addInt16(bytes, bitsPerSample);
     
-    // data chunk
-    bytes.add('data'.codeUnits);
-    _addInt32(bytes, dataSize);
-    bytes.add(int16Samples.buffer.asUint8List());
+  //   // data chunk
+  //   bytes.add('data'.codeUnits);
+  //   _addInt32(bytes, dataSize);
+  //   bytes.add(int16Samples.buffer.asUint8List());
     
-    await file.writeAsBytes(bytes.toBytes());
-  }
+  //   await file.writeAsBytes(bytes.toBytes());
+  // }
   
   void _addInt32(BytesBuilder bytes, int value) {
     bytes.add([
@@ -189,7 +189,7 @@ class _TtsScreenState extends ConsumerState<TtsScreen> {
   void dispose() {
     _player.dispose();
     _textController.dispose();
-    ref.read(sherpaRunnerProvider).disposeTts();
+   // ref.read(sherpaRunnerProvider).disposeTts();
     super.dispose();
   }
 

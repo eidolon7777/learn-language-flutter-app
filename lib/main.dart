@@ -15,19 +15,22 @@ import 'package:permission_handler/permission_handler.dart';
 // import 'src/features/transcription/di/audio_capture_di.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa_onnx;
-import 'src/features/sherpa_onnx/domain/sherpa_model.dart';
-import 'src/features/sherpa_onnx/ui/screens/models_screen.dart';
+// import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa_onnx;
+// import 'src/features/sherpa_onnx/domain/sherpa_model.dart';
+// import 'src/features/sherpa_onnx/ui/screens/models_screen.dart';
+import 'src/features/grammar/ui/grammar_analysis_page.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
   // Initialize audio capture dependency injection
   // AudioCaptureDI.init();
   
-  sherpa_onnx.initBindings();
+   // sherpa_onnx.initBindings();
 
-  await Hive.initFlutter();
-  Hive.registerAdapter(ModelTypeAdapter());
-  Hive.registerAdapter(SherpaModelAdapter());
+  // await Hive.initFlutter();
+  // Hive.registerAdapter(ModelTypeAdapter());
+  // Hive.registerAdapter(SherpaModelAdapter());
   
   runApp(
     const ProviderScope(
@@ -48,7 +51,7 @@ class MyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      home: const HomeScreen(),
+      home: const GrammarAnalysisPage(),
     );
   }
 }
@@ -65,8 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const DeviceSTTScreen(),
     const WhisperScreen(),
-    const ModelsScreen(),
-  //  const AudioCaptureScreen(),
+    // const ModelsScreen(),
+    const GrammarAnalysisPage(),
   ];
 
   @override
@@ -92,14 +95,16 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.hearing),
             label: 'Whisper STT',
           ),
+          /*
           BottomNavigationBarItem(
             icon: Icon(Icons.download),
             label: 'Models',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.audiotrack),
-          //   label: 'Audio Capture',
-          // ),
+          */
+          BottomNavigationBarItem(
+            icon: Icon(Icons.text_fields),
+            label: 'Grammar',
+          ),
         ],
       ),
     );

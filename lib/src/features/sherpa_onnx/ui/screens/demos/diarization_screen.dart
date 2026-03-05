@@ -28,7 +28,7 @@ class _DiarizationScreenState extends ConsumerState<DiarizationScreen> {
 
   Future<void> _initModel() async {
     try {
-      await ref.read(sherpaRunnerProvider).initDiarization(widget.model.id);
+    //  await ref.read(sherpaRunnerProvider).initDiarization(widget.model.id);
       if (mounted) setState(() => _status = 'Ready (Record to analyze speakers)');
     } catch (e) {
       if (mounted) setState(() => _status = 'Error: $e');
@@ -72,23 +72,23 @@ class _DiarizationScreenState extends ConsumerState<DiarizationScreen> {
     final floatSamples = _int16ToFloat32(data);
     
     try {
-      final result = await ref.read(sherpaRunnerProvider).diarize(floatSamples);
-      if (mounted && result != null) {
-        // result should have segments
-        // We assume result has .segments property which is a List
-        // Since we used dynamic, we need to inspect it or assume structure
-        // Usually it's result.timestamps or result.segments
-        // Let's assume result is printable for now
-        setState(() {
-           // For now just show string representation if we can't iterate
-           _status = 'Done';
-           // If result is iterable, we can show list
-           // But let's just show raw result for debugging first
-           _segments = [result.toString()]; 
-        });
-      } else {
-        setState(() => _status = 'No segments found');
-      }
+    //  final result = await ref.read(sherpaRunnerProvider).diarize(floatSamples);
+      // if (mounted && result != null) {
+      //   // result should have segments
+      //   // We assume result has .segments property which is a List
+      //   // Since we used dynamic, we need to inspect it or assume structure
+      //   // Usually it's result.timestamps or result.segments
+      //   // Let's assume result is printable for now
+      //   setState(() {
+      //      // For now just show string representation if we can't iterate
+      //      _status = 'Done';
+      //      // If result is iterable, we can show list
+      //      // But let's just show raw result for debugging first
+      //      _segments = [result.toString()]; 
+      //   });
+      // } else {
+      //   setState(() => _status = 'No segments found');
+      // }
     } catch (e) {
       if (mounted) setState(() => _status = 'Error: $e');
     }
@@ -117,7 +117,7 @@ class _DiarizationScreenState extends ConsumerState<DiarizationScreen> {
   @override
   void dispose() {
     _audioRecorder.dispose();
-    ref.read(sherpaRunnerProvider).disposeDiarization();
+  //  ref.read(sherpaRunnerProvider).disposeDiarization();
     super.dispose();
   }
 

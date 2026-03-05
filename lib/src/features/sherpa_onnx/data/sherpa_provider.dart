@@ -4,5 +4,5 @@ import 'sherpa_runner.dart';
 
 final sherpaRunnerProvider = Provider<SherpaRunner>((ref) {
   final modelManager = ref.watch(modelManagerProvider);
-  return SherpaRunner(modelManager);
+  return SherpaRunner();
 });

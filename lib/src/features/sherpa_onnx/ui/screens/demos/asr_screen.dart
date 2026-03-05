@@ -27,7 +27,7 @@ class _AsrScreenState extends ConsumerState<AsrScreen> {
   
   Future<void> _initModel() async {
     try {
-      await ref.read(sherpaRunnerProvider).initAsr(widget.model.id);
+    //  await ref.read(sherpaRunnerProvider).initAsr(widget.model.id);
       if (mounted) setState(() => _status = 'Ready to record');
     } catch (e) {
       if (mounted) setState(() => _status = 'Error: $e');
@@ -59,11 +59,11 @@ class _AsrScreenState extends ConsumerState<AsrScreen> {
           _status = 'Listening...';
         });
 
-        ref.read(sherpaRunnerProvider).startAsrStream(stream, (text) {
-          setState(() {
-            _transcription = text;
-          });
-        });
+      //  ref.read(sherpaRunnerProvider).startAsrStream(stream, (text) {
+        //   setState(() {
+        //     _transcription = text;
+        //   });
+        // });
       }
     } catch (e) {
       setState(() => _status = 'Error starting record: $e');
@@ -72,7 +72,7 @@ class _AsrScreenState extends ConsumerState<AsrScreen> {
 
   Future<void> _stopRecording() async {
     await _audioRecorder.stop();
-    ref.read(sherpaRunnerProvider).stopAsrStream();
+  //  ref.read(sherpaRunnerProvider).stopAsrStream();
     setState(() {
       _isRecording = false;
       _status = 'Stopped';
@@ -82,7 +82,7 @@ class _AsrScreenState extends ConsumerState<AsrScreen> {
   @override
   void dispose() {
     _audioRecorder.dispose();
-    ref.read(sherpaRunnerProvider).disposeAsr();
+  //  ref.read(sherpaRunnerProvider).disposeAsr();
     super.dispose();
   }
 
